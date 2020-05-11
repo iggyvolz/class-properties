@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace iggyvolz\ClassProperties\examples;
 
-use iggyvolz\ClassProperties\Attributes\Getter;
 use iggyvolz\ClassProperties\Attributes\Identifier;
 use iggyvolz\ClassProperties\Attributes\Property;
 use iggyvolz\ClassProperties\Identifiable;
@@ -17,12 +16,20 @@ class ExampleInvalidUntypedIdentifiable extends Identifiable
     // DO NOT DO THIS
     // <<Property>>
     // <<Identifier>>
-    protected $id;
+    /**
+     * @var mixed
+     */
+    protected $id = "";
+    /**
+     * @param int|string|Identifiable $identifier
+     * @return static|null
+     * @phan-suppress PhanParamSignatureRealMismatchReturnType https://github.com/phan/phan/issues/3795
+     */
     public static function getFromIdentifier($identifier): ?self
     {
         return null;
     }
 }
 
-(new Property)->addToProperty(ExampleInvalidUntypedIdentifiable::class, "id");
-(new Identifier)->addToProperty(ExampleInvalidUntypedIdentifiable::class, "id");
+(new Property())->addToProperty(ExampleInvalidUntypedIdentifiable::class, "id");
+(new Identifier())->addToProperty(ExampleInvalidUntypedIdentifiable::class, "id");

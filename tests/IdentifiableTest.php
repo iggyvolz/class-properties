@@ -17,7 +17,6 @@ class IdentifiableTest extends TestCase
         $this->assertSame(2, $identifiableObject->idPlusOne);
         $this->assertSame(1, $identifiableObject->getIdentifier());
         $this->assertSame(1, $identifiableObject->id);
-
     }
 
     public function testGettingIdentifiableError()
@@ -51,19 +50,23 @@ class IdentifiableTest extends TestCase
     public function testUntypedIdentifiable()
     {
         $this->expectException(\LogicException::class);
-        $this->expectExceptionMessage("Invalid identifier id for ".ExampleInvalidUntypedIdentifiable::class.": Property should be one or more of: int, string, or Identifiable");
+        $this->expectExceptionMessage("Invalid identifier id for " . ExampleInvalidUntypedIdentifiable::class
+            . ": Property should be one or more of: int, string, or Identifiable");
         ExampleInvalidUntypedIdentifiable::init();
     }
     public function testNoIdentifierIdentifiable()
     {
         $this->expectException(\LogicException::class);
-        $this->expectExceptionMessage("No identifier found for ".ExampleInvalidIdentifiableNoIdentifier::class);
+        $this->expectExceptionMessage("No identifier found for " . ExampleInvalidIdentifiableNoIdentifier::class);
         ExampleInvalidIdentifiableNoIdentifier::init();
     }
     public function testDuplicateIdentifier()
     {
         $this->expectException(\LogicException::class);
-        $this->expectExceptionMessage("Duplicate identifier for ".ExampleInvalidIdentifiableDuplicateIdentifier::class.": found id1 and id2");
+        $this->expectExceptionMessage(
+            "Duplicate identifier for " . ExampleInvalidIdentifiableDuplicateIdentifier::class
+            . ": found id1 and id2"
+        );
         ExampleInvalidIdentifiableDuplicateIdentifier::init();
     }
 }

@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace iggyvolz\ClassProperties\examples;
 
-use iggyvolz\ClassProperties\Attributes\Getter;
 use iggyvolz\ClassProperties\Attributes\Identifier;
 use iggyvolz\ClassProperties\Attributes\Property;
 use iggyvolz\ClassProperties\Identifiable;
@@ -19,22 +18,27 @@ class ExampleRecursiveIdentifiable extends Identifiable
     // <<Property>>
     // <<Identifier>>
     protected ExampleIdentifiable $id;
+    /**
+     * @param int|string|Identifiable $identifier
+     * @return static|null
+     * @phan-suppress PhanParamSignatureRealMismatchReturnType https://github.com/phan/phan/issues/3795
+     */
     public static function getFromIdentifier($identifier): ?self
     {
-        if(!$identifier instanceof ExampleIdentifiable) {
+        if (!$identifier instanceof ExampleIdentifiable) {
             $identifier = ExampleIdentifiable::getFromIdentifier($identifier);
         }
-        if(is_null($identifier)) {
+        if (is_null($identifier)) {
             return null;
         }
-        if($identifier->getIdentifier() === 5) {
+        if ($identifier->getIdentifier() === 5) {
             return null;
         }
-        $instance = new self();
+        $instance = new static();
         $instance->__set("id", $identifier);
         return $instance;
     }
 }
 
-(new Property)->addToProperty(ExampleRecursiveIdentifiable::class, "id");
-(new Identifier)->addToProperty(ExampleRecursiveIdentifiable::class, "id");
+(new Property())->addToProperty(ExampleRecursiveIdentifiable::class, "id");
+(new Identifier())->addToProperty(ExampleRecursiveIdentifiable::class, "id");

@@ -18,16 +18,21 @@ class ExampleIdentifiable extends Identifiable
 {
     // <<Property>>
     // <<Identifier>>
-    protected int $id;
+    protected int $id = 0;
     // <<Getter("idPlusOne")>>
-    protected function getIdPlusOne():int
+    protected function getIdPlusOne(): int
     {
-        return $this->__get("id")+1;
+        return $this->__get("id") + 1;
     }
+    /**
+     * @param int|string|Identifiable $identifier
+     * @return static|null
+     * @phan-suppress PhanParamSignatureRealMismatchReturnType https://github.com/phan/phan/issues/3795
+     */
     public static function getFromIdentifier($identifier): ?self
     {
-        $instance = new self();
-        if(!in_array($identifier, [1,3,5], true)) {
+        $instance = new static();
+        if (!in_array($identifier, [1,3,5], true)) {
             return null;
         }
         $instance->__set("id", $identifier);
@@ -35,6 +40,6 @@ class ExampleIdentifiable extends Identifiable
     }
 }
 
-(new Property)->addToProperty(ExampleIdentifiable::class, "id");
-(new Identifier)->addToProperty(ExampleIdentifiable::class, "id");
+(new Property())->addToProperty(ExampleIdentifiable::class, "id");
+(new Identifier())->addToProperty(ExampleIdentifiable::class, "id");
 (new Getter("idPlusOne"))->addToMethod(ExampleIdentifiable::class, "getIdPlusOne");
