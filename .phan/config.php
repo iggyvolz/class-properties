@@ -11,7 +11,7 @@ return [
     ],
     "allow_missing_properties" => false,
     "allow_method_param_type_widening" => true,
-    "null_casts_as_any_type" => true,
+    "null_casts_as_any_type" => false,
     'backward_compatibility_checks' => false,
     "quick_mode" => true,
     "minimum_severity" => 0,

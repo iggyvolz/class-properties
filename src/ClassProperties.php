@@ -9,6 +9,10 @@ use Generator;
 use iggyvolz\ClassProperties\Attributes\Getter;
 use iggyvolz\ClassProperties\Attributes\Property;
 use iggyvolz\ClassProperties\Attributes\Setter;
+use iggyvolz\ClassProperties\Hooks\PostGet;
+use iggyvolz\ClassProperties\Hooks\PostSet;
+use iggyvolz\ClassProperties\Hooks\PreGet;
+use iggyvolz\ClassProperties\Hooks\PreSet;
 use iggyvolz\Initializable\Initializable;
 use iggyvolz\virtualattributes\ReflectionAttribute;
 use iggyvolz\virtualattributes\VirtualAttribute;
@@ -25,9 +29,36 @@ abstract class ClassProperties implements Initializable
     private static array $getters = [];
     /**
      * @var array<string, array<string,ReflectionProperty|Closure>>
-     * @psalm-var array<class-string,array<string, ReflectionProperty|Closure(ClassProperties):Closure(mixed):void>>
+     * @psalm-var array<
+     *  class-string<self>,
+     *  array<string,ReflectionProperty|Closure(ClassProperties):Closure(mixed):void>
+     * >
      */
     private static array $setters = [];
+
+    /**
+     * @var array<string, array<string, PreGet[]>>
+     * @psalm-var array<class-string<self>, array<string,list<PreGet>>>
+     */
+    private static array $preGetHooks = [];
+
+    /**
+     * @var array<string, array<string, PostGet[]>>
+     * @psalm-var array<class-string<self>, array<string,list<PostGet>>>
+     */
+    private static array $postGetHooks = [];
+
+    /**
+     * @var array<string, array<string, PreSet[]>>
+     * @psalm-var array<class-string<self>, array<string,list<PreSet>>>
+     */
+    private static array $preSetHooks = [];
+
+    /**
+     * @var array<string, array<string, PostSet[]>>
+     * @psalm-var array<class-string<self>, array<string,list<PostSet>>>
+     */
+    private static array $postSetHooks = [];
     public static function init(): void
     {
         if (array_key_exists(static::class, self::$getters) && array_key_exists(static::class, self::$setters)) {
@@ -35,6 +66,10 @@ abstract class ClassProperties implements Initializable
         }
         self::$setters[static::class] = [];
         self::$getters[static::class] = [];
+        self::$preGetHooks[static::class] = [];
+        self::$postGetHooks[static::class] = [];
+        self::$preSetHooks[static::class] = [];
+        self::$postSetHooks[static::class] = [];
         $reflection = new ReflectionClass(static::class);
         foreach ($reflection->getProperties() as $property) {
             $property->setAccessible(true);
@@ -54,6 +89,64 @@ abstract class ClassProperties implements Initializable
                     self::$setters[static::class][$property->getName()] = $property;
                 }
             }
+            // Gather pre/post-get/set hooks
+            self::$preGetHooks[static::class][$property->getName()] = array_values(array_map(
+                function (ReflectionAttribute $attr): PreGet {
+                    $inst = $attr->newInstance();
+                    if (!$inst instanceof PreGet) {
+                        // TODO we know this must be a PreGet, but that typing is not available in static analysis
+                        throw new \LogicException();
+                    }
+                    return $inst;
+                },
+                VirtualAttribute::getAttributes(
+                    $property,
+                    PreGet::class,
+                    ReflectionAttribute::IS_INSTANCEOF
+                )
+            ));
+            self::$postGetHooks[static::class][$property->getName()] = array_values(array_map(
+                function (ReflectionAttribute $attr): PostGet {
+                    $inst = $attr->newInstance();
+                    if (!$inst instanceof PostGet) {
+                        throw new \LogicException();
+                    }
+                    return $inst;
+                },
+                VirtualAttribute::getAttributes(
+                    $property,
+                    PostGet::class,
+                    ReflectionAttribute::IS_INSTANCEOF
+                )
+            ));
+            self::$preSetHooks[static::class][$property->getName()] = array_values(array_map(
+                function (ReflectionAttribute $attr): PreSet {
+                    $inst = $attr->newInstance();
+                    if (!$inst instanceof PreSet) {
+                        throw new \LogicException();
+                    }
+                    return $inst;
+                },
+                VirtualAttribute::getAttributes(
+                    $property,
+                    PreSet::class,
+                    ReflectionAttribute::IS_INSTANCEOF
+                )
+            ));
+            self::$postSetHooks[static::class][$property->getName()] = array_values(array_map(
+                function (ReflectionAttribute $attr): PostSet {
+                    $inst = $attr->newInstance();
+                    if (!$inst instanceof PostSet) {
+                        throw new \LogicException();
+                    }
+                    return $inst;
+                },
+                VirtualAttribute::getAttributes(
+                    $property,
+                    PostSet::class,
+                    ReflectionAttribute::IS_INSTANCEOF
+                )
+            ));
         }
         foreach ($reflection->getMethods() as $method) {
             $method->setAccessible(true);
@@ -119,12 +212,20 @@ abstract class ClassProperties implements Initializable
         if (!array_key_exists($name, self::$setters[static::class])) {
             throw new \InvalidArgumentException("Invalid property access $name on " . static::class);
         }
+        foreach (self::$preSetHooks[static::class][$name] ?? [] as $preSetHook) {
+            /** @var PreSet $preSetHook */
+            $preSetHook->runPreSetHook($this, $name, $value);
+        }
         /** @var Closure|ReflectionProperty $getter */
         $setter = self::$setters[static::class][$name];
         if ($setter instanceof ReflectionProperty) {
             $setter->setValue($this, $value);
         } else {
             $setter($this)($value);
+        }
+        foreach (self::$postSetHooks[static::class][$name] ?? [] as $postSetHook) {
+            /** @var PostSet $postSetHook */
+            $postSetHook->runPostSetHook($this, $name, $value);
         }
     }
 
@@ -137,12 +238,23 @@ abstract class ClassProperties implements Initializable
         if (!array_key_exists($name, self::$getters[static::class])) {
             throw new \InvalidArgumentException("Invalid property access $name on " . static::class);
         }
+        foreach (self::$preGetHooks[static::class][$name] ?? [] as $preGetHook) {
+            /** @var PreGet $preGetHook */
+            $preGetHook->runPreGetHook($this, $name);
+        }
         $getter = self::$getters[static::class][$name];
         if ($getter instanceof ReflectionProperty) {
-            return $getter->getValue($this);
+            /** @psalm-var mixed $val */
+            $val = $getter->getValue($this);
         } else {
-            return $getter($this)();
+            /** @psalm-var mixed $val */
+            $val = $getter($this)();
         }
+        foreach (self::$postGetHooks[static::class][$name] ?? [] as $postGetHook) {
+            /** @var PostGet $postGetHook */
+            $postGetHook->runPostGetHook($this, $name, $val);
+        }
+        return $val;
     }
 
     public function __isset(string $name): bool
