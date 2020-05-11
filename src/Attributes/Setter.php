@@ -26,7 +26,9 @@ class Setter extends VirtualAttribute
             case "PropertyName":
                 return $this->PropertyName;
             default:
+                // @codeCoverageIgnoreStart
                 return null;
+                // @codeCoverageIgnoreEnd
         }
     }
 }

@@ -32,7 +32,9 @@ class Property extends VirtualAttribute
             case "CanWrite":
                 return $this->CanWrite;
             default:
+                // @codeCoverageIgnoreStart
                 return null;
+                // @codeCoverageIgnoreEnd
         }
     }
 }

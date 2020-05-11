@@ -63,4 +63,44 @@ class ClassPropertiesTest extends TestCase
         $this->expectOutputString("Calling someOtherSetter(73)");
         $instance->dynamicProp = 73;
     }
+
+    public function testDebugInfo()
+    {
+        $instance = new TestClass();
+        $this->expectOutputRegex("/.*/");
+        $this->assertSame([
+            "prop" => -1,
+            "readOnlyProp" => 8,
+            "dynamicReadProp" => 2,
+            "dynamicProp" => 10,
+        ], $instance->__debugInfo());
+    }
+
+    public function testUnset()
+    {
+        $instance = new TestClass();
+        $this->expectException(\LogicException::class);
+        $this->expectExceptionMessage("Invalid unset on " . TestClass::class);
+        unset($instance->prop);
+    }
+
+    public function testIsset()
+    {
+        $instance = new TestClass();
+        $this->assertTrue(isset($instance->prop));
+    }
+
+    public function testIssetDynamic()
+    {
+        $instance = new TestClass();
+        $this->assertTrue(isset($instance->dynamicReadProp));
+    }
+
+    public function testIssetError()
+    {
+        $instance = new TestClass();
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage("Invalid property access dynamicWriteProp on " . TestClass::class);
+        $this->assertNull(isset($instance->dynamicWriteProp));
+    }
 }

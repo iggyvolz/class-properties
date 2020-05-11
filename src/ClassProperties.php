@@ -95,7 +95,9 @@ abstract class ClassProperties implements Initializable
                     $inst = $attr->newInstance();
                     if (!$inst instanceof PreGet) {
                         // TODO we know this must be a PreGet, but that typing is not available in static analysis
+                        // @codeCoverageIgnoreStart
                         throw new \LogicException();
+                        // @codeCoverageIgnoreEnd
                     }
                     return $inst;
                 },
@@ -109,7 +111,9 @@ abstract class ClassProperties implements Initializable
                 function (ReflectionAttribute $attr): PostGet {
                     $inst = $attr->newInstance();
                     if (!$inst instanceof PostGet) {
+                        // @codeCoverageIgnoreStart
                         throw new \LogicException();
+                        // @codeCoverageIgnoreEnd
                     }
                     return $inst;
                 },
@@ -123,7 +127,9 @@ abstract class ClassProperties implements Initializable
                 function (ReflectionAttribute $attr): PreSet {
                     $inst = $attr->newInstance();
                     if (!$inst instanceof PreSet) {
+                        // @codeCoverageIgnoreStart
                         throw new \LogicException();
+                        // @codeCoverageIgnoreEnd
                     }
                     return $inst;
                 },
@@ -137,7 +143,9 @@ abstract class ClassProperties implements Initializable
                 function (ReflectionAttribute $attr): PostSet {
                     $inst = $attr->newInstance();
                     if (!$inst instanceof PostSet) {
+                        // @codeCoverageIgnoreStart
                         throw new \LogicException();
+                        // @codeCoverageIgnoreEnd
                     }
                     return $inst;
                 },
@@ -163,7 +171,9 @@ abstract class ClassProperties implements Initializable
                     function (self $self) use ($method): Closure {
                         $closure = $method->getClosure($self);
                         if (is_null($closure)) {
+                            // @codeCoverageIgnoreStart
                             throw new \RuntimeException("Could not get closure for " . $method->getName());
+                            // @codeCoverageIgnoreEnd
                         }
                         return /** @return mixed */fn() => $closure();
                     };
@@ -181,7 +191,9 @@ abstract class ClassProperties implements Initializable
                     function (self $self) use ($method): Closure {
                         $closure = $method->getClosure($self);
                         if (is_null($closure)) {
+                            // @codeCoverageIgnoreStart
                             throw new \RuntimeException("Could not get closure for " . $method->getName());
+                            // @codeCoverageIgnoreEnd
                         }
                         return /** @param mixed $val */function ($val) use ($closure): void {
                             $closure($val);
