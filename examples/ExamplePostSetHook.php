@@ -6,9 +6,10 @@ namespace iggyvolz\ClassProperties\examples;
 
 use iggyvolz\ClassProperties\ClassProperties;
 use iggyvolz\ClassProperties\Hooks\PostSet;
-use iggyvolz\virtualattributes\VirtualAttribute;
+use Attribute;
 
-class ExamplePostSetHook extends VirtualAttribute implements PostSet
+<<Attribute(Attribute::TARGET_PROPERTY | Attribute::TARGET_METHOD)>>
+class ExamplePostSetHook implements PostSet
 {
 
     public function runPostSetHook(ClassProperties $target, string $property, $value): void

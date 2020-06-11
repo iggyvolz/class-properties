@@ -6,9 +6,10 @@ namespace iggyvolz\ClassProperties\examples;
 
 use iggyvolz\ClassProperties\ClassProperties;
 use iggyvolz\ClassProperties\Hooks\PreSet;
-use iggyvolz\virtualattributes\VirtualAttribute;
+use Attribute;
 
-class ExamplePreSetHook extends VirtualAttribute implements PreSet
+<<Attribute(Attribute::TARGET_PROPERTY | Attribute::TARGET_METHOD)>>
+class ExamplePreSetHook implements PreSet
 {
 
     public function runPreSetHook(ClassProperties $target, string $property, &$value): void

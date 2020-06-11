@@ -15,8 +15,8 @@ use iggyvolz\ClassProperties\Identifiable;
  */
 class ExampleRecursiveIdentifiable extends Identifiable
 {
-    // <<Property>>
-    // <<Identifier>>
+    <<Property>>
+    <<Identifier>>
     protected ExampleIdentifiable $id;
     /**
      * @param int|string|Identifiable $identifier
@@ -39,6 +39,3 @@ class ExampleRecursiveIdentifiable extends Identifiable
         return $instance;
     }
 }
-
-(new Property())->addToProperty(ExampleRecursiveIdentifiable::class, "id");
-(new Identifier())->addToProperty(ExampleRecursiveIdentifiable::class, "id");

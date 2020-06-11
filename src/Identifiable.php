@@ -5,8 +5,7 @@ declare(strict_types=1);
 namespace iggyvolz\ClassProperties;
 
 use iggyvolz\ClassProperties\Attributes\Identifier;
-use iggyvolz\virtualattributes\ReflectionAttribute;
-use iggyvolz\virtualattributes\VirtualAttribute;
+use ReflectionAttribute;
 
 /**
  * Class with an <<Identifier>> attribute
@@ -38,8 +37,7 @@ abstract class Identifiable extends ClassProperties
         $identifier = null;
         foreach ($refl->getProperties() as $property) {
             if (
-                !empty(VirtualAttribute::getAttributes(
-                    $property,
+                !empty($property->getAttributes(
                     Identifier::class,
                     ReflectionAttribute::IS_INSTANCEOF
                 ))
