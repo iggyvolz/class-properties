@@ -97,7 +97,10 @@ abstract class Identifiable extends ClassProperties
     public static function getFromIdentifierForced($identifier): self
     {
         if ((new \ReflectionClass(static::class))->isAbstract()) {
+            // Undefined behaviour
+            // @codeCoverageIgnoreStart
             throw new \LogicException("Cannot call getFromIdentifier on an abstract class");
+            // @codeCoverageIgnoreEnd
         }
         $result = static::getFromIdentifier($identifier);
         if (is_null($result)) {
