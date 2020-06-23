@@ -19,7 +19,7 @@ class Comparison extends Validation
     public const GREATER = 1 << 2;
     public function __construct(
         <<ReadOnlyProperty>>
-            float|int $checkValue,
+            private float|int $checkValue,
         <<ReadOnlyProperty>>
             private int $checks
     ) {
@@ -43,12 +43,12 @@ class Comparison extends Validation
         }
         $comparison = self::getCheckType($this->checks);
         if(!($this->checks & $result)) {
-            throw new ValidationException($this->checkValue. " is not $comparison $value");
+            throw new ValidationException($value. " is not $comparison ".$this->checkValue);
         }
     }
     public static function getCheckType(int $type)
     {
-        // return match($this->checks) {
+        // return match($type) {
         //     self::GREATER => "greater than",
         //     self::EQUAL => "equal to",
         //     self::GREATER | self::EQUAL => "greater than or equal to",
@@ -58,7 +58,7 @@ class Comparison extends Validation
         //     default => "(nonsensical comparision ".$this->checks.")"
         // }
 
-        switch($this->checks) {
+        switch($type) {
             case self::GREATER: return "greater than";
             case self::EQUAL: return "equal to";
             case self::GREATER | self::EQUAL: return "greater than or equal to";

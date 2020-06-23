@@ -7,8 +7,9 @@ namespace iggyvolz\ClassProperties\Attributes\Validation;
 use Attribute;
 use iggyvolz\ClassProperties\Hooks\PreSet;
 use iggyvolz\ClassProperties\Identifiable;
+use iggyvolz\ClassProperties\ClassProperties;
 
-abstract class Validation extends PreSet
+abstract class Validation implements PreSet
 {
     public function runPreSetHook(ClassProperties $target, string $property, &$value): void
     {
