@@ -8,4 +8,4 @@ cache:
     - $HOME/.composer/cache
 
 install:
-  - composer --prefer-dist --classmap-authoritative install
+  - composer --prefer-dist --classmap-authoritative install --ignore-platform-reqs
