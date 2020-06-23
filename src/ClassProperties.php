@@ -14,10 +14,8 @@ use iggyvolz\ClassProperties\Hooks\PostSet;
 use iggyvolz\ClassProperties\Hooks\PreGet;
 use iggyvolz\ClassProperties\Hooks\PreSet;
 use iggyvolz\Initializable\Initializable;
-use iggyvolz\virtualattributes\ReflectionAttribute;
-use iggyvolz\virtualattributes\VirtualAttribute;
 use ReflectionClass;
-//use ReflectionAttribute;
+use ReflectionAttribute;
 use ReflectionProperty;
 
 abstract class ClassProperties implements Initializable
@@ -74,8 +72,7 @@ abstract class ClassProperties implements Initializable
         foreach ($reflection->getProperties() as $property) {
             $property->setAccessible(true);
             foreach (
-                VirtualAttribute::getAttributes(
-                    $property,
+                $property->getAttributes(
                     Property::class,
                     ReflectionAttribute::IS_INSTANCEOF
                 ) as $attribute
@@ -101,8 +98,7 @@ abstract class ClassProperties implements Initializable
                     }
                     return $inst;
                 },
-                VirtualAttribute::getAttributes(
-                    $property,
+                $property->getAttributes(
                     PreGet::class,
                     ReflectionAttribute::IS_INSTANCEOF
                 )
@@ -117,8 +113,7 @@ abstract class ClassProperties implements Initializable
                     }
                     return $inst;
                 },
-                VirtualAttribute::getAttributes(
-                    $property,
+                $property->getAttributes(
                     PostGet::class,
                     ReflectionAttribute::IS_INSTANCEOF
                 )
@@ -133,8 +128,7 @@ abstract class ClassProperties implements Initializable
                     }
                     return $inst;
                 },
-                VirtualAttribute::getAttributes(
-                    $property,
+                $property->getAttributes(
                     PreSet::class,
                     ReflectionAttribute::IS_INSTANCEOF
                 )
@@ -149,8 +143,7 @@ abstract class ClassProperties implements Initializable
                     }
                     return $inst;
                 },
-                VirtualAttribute::getAttributes(
-                    $property,
+                $property->getAttributes(
                     PostSet::class,
                     ReflectionAttribute::IS_INSTANCEOF
                 )
@@ -159,8 +152,7 @@ abstract class ClassProperties implements Initializable
         foreach ($reflection->getMethods() as $method) {
             $method->setAccessible(true);
             foreach (
-                VirtualAttribute::getAttributes(
-                    $method,
+                $method->getAttributes(
                     Getter::class,
                     ReflectionAttribute::IS_INSTANCEOF
                 ) as $attribute
@@ -179,8 +171,7 @@ abstract class ClassProperties implements Initializable
                     };
             }
             foreach (
-                VirtualAttribute::getAttributes(
-                    $method,
+                $method->getAttributes(
                     Setter::class,
                     ReflectionAttribute::IS_INSTANCEOF
                 ) as $attribute

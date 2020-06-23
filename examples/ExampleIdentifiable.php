@@ -16,10 +16,10 @@ use iggyvolz\ClassProperties\Identifiable;
  */
 class ExampleIdentifiable extends Identifiable
 {
-    // <<Property>>
-    // <<Identifier>>
+    <<Property>>
+    <<Identifier>>
     protected int $id = 0;
-    // <<Getter("idPlusOne")>>
+    <<Getter("idPlusOne")>>
     protected function getIdPlusOne(): int
     {
         return $this->__get("id") + 1;
@@ -39,7 +39,3 @@ class ExampleIdentifiable extends Identifiable
         return $instance;
     }
 }
-
-(new Property())->addToProperty(ExampleIdentifiable::class, "id");
-(new Identifier())->addToProperty(ExampleIdentifiable::class, "id");
-(new Getter("idPlusOne"))->addToMethod(ExampleIdentifiable::class, "getIdPlusOne");

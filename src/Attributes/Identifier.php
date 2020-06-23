@@ -4,16 +4,12 @@ declare(strict_types=1);
 
 namespace iggyvolz\ClassProperties\Attributes;
 
-use iggyvolz\virtualattributes\VirtualAttribute;
+use Attribute;
 
-//<<PhpAttribute>>
+<<Attribute(Attribute::TARGET_PROPERTY)>>
 /**
  * Documents the identifier for the object
  */
-class Identifier extends VirtualAttribute
+class Identifier
 {
-    public function __construct()
-    {
-        parent::__construct();
-    }
 }

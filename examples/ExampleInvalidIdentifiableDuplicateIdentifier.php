@@ -13,11 +13,11 @@ use iggyvolz\ClassProperties\Identifiable;
  */
 class ExampleInvalidIdentifiableDuplicateIdentifier extends Identifiable
 {
-    // <<Property>>
-    // <<Identifier>>
+    <<Property>>
+    <<Identifier>>
     protected int $id1 = 0;
-    // <<Property>>
-    // <<Identifier>>
+    <<Property>>
+    <<Identifier>>
     protected int $id2 = 0;
     /**
      * @param int|string|Identifiable $identifier
@@ -29,8 +29,3 @@ class ExampleInvalidIdentifiableDuplicateIdentifier extends Identifiable
         return null;
     }
 }
-
-(new Property())->addToProperty(ExampleInvalidIdentifiableDuplicateIdentifier::class, "id1");
-(new Identifier())->addToProperty(ExampleInvalidIdentifiableDuplicateIdentifier::class, "id1");
-(new Property())->addToProperty(ExampleInvalidIdentifiableDuplicateIdentifier::class, "id2");
-(new Identifier())->addToProperty(ExampleInvalidIdentifiableDuplicateIdentifier::class, "id2");

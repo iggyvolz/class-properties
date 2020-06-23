@@ -4,21 +4,21 @@ declare(strict_types=1);
 
 namespace iggyvolz\ClassProperties\Attributes;
 
-//<<PhpAttribute>>
-use iggyvolz\virtualattributes\VirtualAttribute;
+use Attribute;
+
+<<Attribute(Attribute::TARGET_METHOD)>>
 
 /**
  * Documents a getter for a virtual property
  * @property-read string $PropertyName
  */
-class Setter extends VirtualAttribute
+class Setter
 {
     private string $PropertyName;
     public function __construct(string $propertyName)
     {
         // @phan-suppress-next-line PhanAccessReadOnlyMagicProperty
         $this->PropertyName = $propertyName;
-        parent::__construct($propertyName);
     }
     public function __get(string $name): ?string
     {
