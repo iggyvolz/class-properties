@@ -9,7 +9,7 @@ use iggyvolz\ClassProperties\Hooks\PostGet;
 use iggyvolz\virtualattributes\VirtualAttribute;
 use Attribute;
 
-<<Attribute(Attribute::TARGET_PROPERTY | Attribute::TARGET_METHOD)>>
+@@Attribute(Attribute::TARGET_PROPERTY | Attribute::TARGET_METHOD)
 class ExamplePostGetHook implements PostGet
 {
     public function runPostGetHook(ClassProperties $target, string $property, &$value): void

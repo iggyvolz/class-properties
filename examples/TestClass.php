@@ -19,28 +19,28 @@ use iggyvolz\ClassProperties\ClassProperties;
  */
 class TestClass extends ClassProperties
 {
-    <<Property>>
+    @@Property
     protected int $prop = -1;
-    <<ReadOnlyProperty>>
+    @@ReadOnlyProperty
     protected int $readOnlyProp = 8;
-    <<Getter("dynamicReadProp")>>
+    @@Getter("dynamicReadProp")
     protected function someGetter(): int
     {
         echo "Calling someGetter";
         return 2;
     }
-    <<Setter("dynamicWriteProp")>>
+    @@Setter("dynamicWriteProp")
     protected function someSetter(int $val): void
     {
         echo "Calling someSetter($val)";
     }
-    <<Getter("dynamicProp")>>
+    @@Getter("dynamicProp")
     protected function someOtherGetter(): int
     {
         echo "Calling someOtherGetter";
         return 10;
     }
-    <<Setter("dynamicProp")>>
+    @@Setter("dynamicProp")
     protected function someOtherSetter(int $val): void
     {
         echo "Calling someOtherSetter($val)";

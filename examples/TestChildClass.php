@@ -8,6 +8,6 @@ use iggyvolz\ClassProperties\Attributes\Property;
 
 class TestChildClass extends TestClass
 {
-    <<Property>>
+    @@Property
     protected int $otherProp = -1;
 }

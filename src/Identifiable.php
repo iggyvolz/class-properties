@@ -8,7 +8,7 @@ use iggyvolz\ClassProperties\Attributes\Identifier;
 use ReflectionAttribute;
 
 /**
- * Class with an <<Identifier>> attribute
+ * Class with an @@Identifier attribute
  */
 abstract class Identifiable extends ClassProperties
 {

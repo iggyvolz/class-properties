@@ -8,7 +8,7 @@ use iggyvolz\ClassProperties\ClassProperties;
 use iggyvolz\ClassProperties\Hooks\PreGet;
 use Attribute;
 
-<<Attribute(Attribute::TARGET_PROPERTY | Attribute::TARGET_METHOD)>>
+@@Attribute(Attribute::TARGET_PROPERTY | Attribute::TARGET_METHOD)
 class ExamplePreGetHook implements PreGet
 {
 
