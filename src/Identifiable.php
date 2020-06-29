@@ -4,8 +4,9 @@ declare(strict_types=1);
 
 namespace iggyvolz\ClassProperties;
 
-use iggyvolz\ClassProperties\Attributes\Identifier;
+use ReflectionClass;
 use ReflectionAttribute;
+use iggyvolz\ClassProperties\Attributes\Identifier;
 
 /**
  * Class with an <<Identifier>> attribute
@@ -19,7 +20,9 @@ abstract class Identifiable extends ClassProperties
 
     public static function init(): void
     {
-        static::getIdentifierName();
+        if(!(new ReflectionClass(static::class))->isAbstract()) {
+            static::getIdentifierName();
+        }
         parent::init();
     }
 
