@@ -2,12 +2,13 @@
 
 namespace iggyvolz\ClassProperties\tests;
 
-use iggyvolz\ClassProperties\examples\ExampleIdentifiable;
-use iggyvolz\ClassProperties\examples\ExampleInvalidIdentifiableDuplicateIdentifier;
-use iggyvolz\ClassProperties\examples\ExampleInvalidIdentifiableNoIdentifier;
-use iggyvolz\ClassProperties\examples\ExampleInvalidUntypedIdentifiable;
-use iggyvolz\ClassProperties\examples\ExampleRecursiveIdentifiable;
 use PHPUnit\Framework\TestCase;
+use iggyvolz\ClassProperties\Identifiable;
+use iggyvolz\ClassProperties\examples\ExampleIdentifiable;
+use iggyvolz\ClassProperties\examples\ExampleRecursiveIdentifiable;
+use iggyvolz\ClassProperties\examples\ExampleInvalidUntypedIdentifiable;
+use iggyvolz\ClassProperties\examples\ExampleInvalidIdentifiableNoIdentifier;
+use iggyvolz\ClassProperties\examples\ExampleInvalidIdentifiableDuplicateIdentifier;
 
 class IdentifiableTest extends TestCase
 {
@@ -68,5 +69,10 @@ class IdentifiableTest extends TestCase
             . ": found id1 and id2"
         );
         ExampleInvalidIdentifiableDuplicateIdentifier::init();
+    }
+    public function testNoIdentifierCheckOnAbstractClass()
+    {
+        $this->assertSame(1,1); // No exception should be thrown
+        Identifiable::init();
     }
 }
