@@ -14,8 +14,8 @@ use iggyvolz\ClassProperties\Identifiable;
 class ExampleInvalidUntypedIdentifiable extends Identifiable
 {
     // DO NOT DO THIS
-    <<Property>>
-    <<Identifier>>
+    @@Property
+    @@Identifier
     /**
      * @var mixed
      */

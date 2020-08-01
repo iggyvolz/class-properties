@@ -15,8 +15,8 @@ use iggyvolz\ClassProperties\Identifiable;
  */
 class ExampleRecursiveIdentifiable extends Identifiable
 {
-    <<Property>>
-    <<Identifier>>
+    @@Property
+    @@Identifier
     protected ExampleIdentifiable $id;
     /**
      * @param int|string|Identifiable $identifier
