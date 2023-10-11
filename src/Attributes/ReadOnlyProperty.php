@@ -6,7 +6,7 @@ namespace iggyvolz\ClassProperties\Attributes;
 
 use Attribute;
 
-@@Attribute(Attribute::TARGET_PROPERTY)
+#[Attribute(Attribute::TARGET_PROPERTY)]
 class ReadOnlyProperty extends Property
 {
     public function __construct()

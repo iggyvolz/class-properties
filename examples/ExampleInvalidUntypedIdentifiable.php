@@ -14,16 +14,13 @@ use iggyvolz\ClassProperties\Identifiable;
 class ExampleInvalidUntypedIdentifiable extends Identifiable
 {
     // DO NOT DO THIS
-    @@Property
-    @@Identifier
-    /**
-     * @var mixed
-     */
+    #[Property]
+    #[Identifier]
     protected $id = "";
+
     /**
      * @param int|string|Identifiable $identifier
      * @return static|null
-     * @phan-suppress PhanParamSignatureRealMismatchReturnType https://github.com/phan/phan/issues/3795
      */
     public static function getFromIdentifier($identifier): ?self
     {

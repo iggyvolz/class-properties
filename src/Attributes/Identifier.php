@@ -6,7 +6,7 @@ namespace iggyvolz\ClassProperties\Attributes;
 
 use Attribute;
 
-@@Attribute(Attribute::TARGET_PROPERTY)
+#[Attribute(Attribute::TARGET_PROPERTY)]
 /**
  * Documents the identifier for the object
  */

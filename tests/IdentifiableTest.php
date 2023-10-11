@@ -48,6 +48,7 @@ class IdentifiableTest extends TestCase
         $this->expectExceptionMessage("Could not find object " . ExampleRecursiveIdentifiable::class . ":5");
         ExampleRecursiveIdentifiable::getFromIdentifierForced(ExampleIdentifiable::getFromIdentifierForced(5));
     }
+
     public function testUntypedIdentifiable()
     {
         $this->expectException(\LogicException::class);
@@ -55,12 +56,14 @@ class IdentifiableTest extends TestCase
             . ": Property should be one or more of: int, string, or Identifiable");
         ExampleInvalidUntypedIdentifiable::init();
     }
+
     public function testNoIdentifierIdentifiable()
     {
         $this->expectException(\LogicException::class);
         $this->expectExceptionMessage("No identifier found for " . ExampleInvalidIdentifiableNoIdentifier::class);
         ExampleInvalidIdentifiableNoIdentifier::init();
     }
+
     public function testDuplicateIdentifier()
     {
         $this->expectException(\LogicException::class);
@@ -70,9 +73,10 @@ class IdentifiableTest extends TestCase
         );
         ExampleInvalidIdentifiableDuplicateIdentifier::init();
     }
+
     public function testNoIdentifierCheckOnAbstractClass()
     {
-        $this->assertSame(1,1); // No exception should be thrown
+        $this->assertSame(1, 1); // No exception should be thrown
         Identifiable::init();
     }
 }

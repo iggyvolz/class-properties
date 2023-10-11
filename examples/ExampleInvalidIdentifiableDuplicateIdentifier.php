@@ -13,16 +13,16 @@ use iggyvolz\ClassProperties\Identifiable;
  */
 class ExampleInvalidIdentifiableDuplicateIdentifier extends Identifiable
 {
-    @@Property
-    @@Identifier
+    #[Property]
+    #[Identifier]
     protected int $id1 = 0;
-    @@Property
-    @@Identifier
+    #[Property]
+    #[Identifier]
     protected int $id2 = 0;
+
     /**
      * @param int|string|Identifiable $identifier
      * @return static|null
-     * @phan-suppress PhanParamSignatureRealMismatchReturnType https://github.com/phan/phan/issues/3795
      */
     public static function getFromIdentifier($identifier): ?self
     {
