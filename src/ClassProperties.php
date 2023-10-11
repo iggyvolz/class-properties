@@ -57,6 +57,7 @@ abstract class ClassProperties implements Initializable
      * @psalm-var array<class-string<self>, array<string,list<PostSet>>>
      */
     private static array $postSetHooks = [];
+
     public static function init(): void
     {
         if (array_key_exists(static::class, self::$getters) && array_key_exists(static::class, self::$setters)) {
@@ -77,7 +78,6 @@ abstract class ClassProperties implements Initializable
                     ReflectionAttribute::IS_INSTANCEOF
                 ) as $attribute
             ) {
-                /** @var Property $propertyInstance */
                 $propertyInstance = $attribute->newInstance();
                 if ($propertyInstance->CanRead) {
                     self::$getters[static::class][$property->getName()] = $property;
@@ -157,7 +157,6 @@ abstract class ClassProperties implements Initializable
                     ReflectionAttribute::IS_INSTANCEOF
                 ) as $attribute
             ) {
-                /** @var Getter $propertyInstance */
                 $propertyInstance = $attribute->newInstance();
                 self::$getters[static::class][$propertyInstance->PropertyName] =
                     function (self $self) use ($method): Closure {
@@ -167,7 +166,7 @@ abstract class ClassProperties implements Initializable
                             throw new \RuntimeException("Could not get closure for " . $method->getName());
                             // @codeCoverageIgnoreEnd
                         }
-                        return /** @return mixed */fn() => $closure();
+                        return /** @return mixed */ fn() => $closure();
                     };
             }
             foreach (
@@ -176,20 +175,8 @@ abstract class ClassProperties implements Initializable
                     ReflectionAttribute::IS_INSTANCEOF
                 ) as $attribute
             ) {
-                /** @var Setter $propertyInstance */
                 $propertyInstance = $attribute->newInstance();
-                self::$setters[static::class][$propertyInstance->PropertyName] =
-                    function (self $self) use ($method): Closure {
-                        $closure = $method->getClosure($self);
-                        if (is_null($closure)) {
-                            // @codeCoverageIgnoreStart
-                            throw new \RuntimeException("Could not get closure for " . $method->getName());
-                            // @codeCoverageIgnoreEnd
-                        }
-                        return /** @param mixed $val */function ($val) use ($closure): void {
-                            $closure($val);
-                        };
-                    };
+                self::$setters[static::class][$propertyInstance->PropertyName] = $method->getClosure(...);
             }
         }
     }
@@ -199,8 +186,8 @@ abstract class ClassProperties implements Initializable
      */
     public function __debugInfo(): array
     {
-        return iterator_to_array((/** @return Generator<string,mixed> */function (): Generator {
-            foreach (self::$getters[static::class] as $name => $property) {
+        return iterator_to_array((/** @return Generator<string,mixed> */ function (): Generator {
+            foreach (self::$getters[static::class] as $name => $_) {
                 yield $name => $this->__get($name);
             }
         })());
@@ -216,7 +203,6 @@ abstract class ClassProperties implements Initializable
             throw new \InvalidArgumentException("Invalid property access $name on " . static::class);
         }
         foreach (self::$preSetHooks[static::class][$name] ?? [] as $preSetHook) {
-            /** @var PreSet $preSetHook */
             $preSetHook->runPreSetHook($this, $name, $value);
         }
         /** @var Closure|ReflectionProperty $getter */
@@ -227,7 +213,6 @@ abstract class ClassProperties implements Initializable
             $setter($this)($value);
         }
         foreach (self::$postSetHooks[static::class][$name] ?? [] as $postSetHook) {
-            /** @var PostSet $postSetHook */
             $postSetHook->runPostSetHook($this, $name, $value);
         }
     }
@@ -242,7 +227,6 @@ abstract class ClassProperties implements Initializable
             throw new \InvalidArgumentException("Invalid property access $name on " . static::class);
         }
         foreach (self::$preGetHooks[static::class][$name] ?? [] as $preGetHook) {
-            /** @var PreGet $preGetHook */
             $preGetHook->runPreGetHook($this, $name);
         }
         $getter = self::$getters[static::class][$name];
@@ -254,7 +238,6 @@ abstract class ClassProperties implements Initializable
             $val = $getter($this)();
         }
         foreach (self::$postGetHooks[static::class][$name] ?? [] as $postGetHook) {
-            /** @var PostGet $postGetHook */
             $postGetHook->runPostGetHook($this, $name, $val);
         }
         return $val;

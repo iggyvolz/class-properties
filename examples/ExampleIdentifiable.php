@@ -16,23 +16,24 @@ use iggyvolz\ClassProperties\Identifiable;
  */
 class ExampleIdentifiable extends Identifiable
 {
-    @@Property
-    @@Identifier
+    #[Property]
+    #[Identifier]
     protected int $id = 0;
-    @@Getter("idPlusOne")
+
+    #[Getter("idPlusOne")]
     protected function getIdPlusOne(): int
     {
         return $this->__get("id") + 1;
     }
+
     /**
      * @param int|string|Identifiable $identifier
      * @return static|null
-     * @phan-suppress PhanParamSignatureRealMismatchReturnType https://github.com/phan/phan/issues/3795
      */
     public static function getFromIdentifier($identifier): ?self
     {
         $instance = new static();
-        if (!in_array($identifier, [1,3,5], true)) {
+        if (!in_array($identifier, [1, 3, 5], true)) {
             return null;
         }
         $instance->__set("id", $identifier);

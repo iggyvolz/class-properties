@@ -9,7 +9,7 @@ use ReflectionAttribute;
 use iggyvolz\ClassProperties\Attributes\Identifier;
 
 /**
- * Class with an @@Identifier attribute
+ * Class with an #[Identifier] attribute
  */
 abstract class Identifiable extends ClassProperties
 {
@@ -20,7 +20,7 @@ abstract class Identifiable extends ClassProperties
 
     public static function init(): void
     {
-        if(!(new ReflectionClass(static::class))->isAbstract()) {
+        if (!(new ReflectionClass(static::class))->isAbstract()) {
             static::getIdentifierName();
         }
         parent::init();
@@ -30,6 +30,7 @@ abstract class Identifiable extends ClassProperties
      * @var \ReflectionProperty[]
      */
     private static array $identifiers = [];
+
     public static function getIdentifierName(): string
     {
         if (array_key_exists(static::class, self::$identifiers)) {
@@ -68,6 +69,7 @@ abstract class Identifiable extends ClassProperties
         self::$identifiers[static::class] = $identifier;
         return $identifier->getName();
     }
+
     private static function checkValidIdentifier(\ReflectionProperty $prop): bool
     {
         $type = $prop->getType();
@@ -92,6 +94,7 @@ abstract class Identifiable extends ClassProperties
      * @return static|null
      */
     abstract public static function getFromIdentifier($identifier): ?self;
+
     /**
      * @param int|string|Identifiable $identifier
      * @return static
